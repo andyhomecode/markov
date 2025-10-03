@@ -13,13 +13,19 @@ def generate_text(markov_chain, start_word, num_words=50):
     generated_words = [start_word]
     current_word = start_word
 
-    for _ in range(num_words - 1):
-        if current_word in markov_chain and markov_chain[current_word]:
+    # Loop to generate the remaining words (we already have the start word)
+    for word_count in range(num_words - 1):
+        # Check if the current word exists in our model and has possible next words
+        if current_word in markov_chain and len(markov_chain[current_word]) > 0:
+            # Randomly pick one of the possible next words from the list
             next_word = random.choice(markov_chain[current_word])
+            # Add the chosen word to our growing list of generated words
             generated_words.append(next_word)
+            # Update the current word to the one we just picked (for the next iteration)
             current_word = next_word
         else:
-            # If a word has no followers, stop or try a new random start
+            # If the current word has no possible next words, stop generating
+            # This prevents the program from getting stuck or crashing
             break 
             
     return ' '.join(generated_words)
